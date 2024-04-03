@@ -5,29 +5,20 @@ Um eine reibungslose Einlieferung zu gewährleisten, beachten Sie bitte immer di
 
 - Das Feld **BT-05 Notice Dispatch date** **(IssueDate)** muss zum Zeitpunkt des Versands an den Vermittlungsdienst zwischen gestern und morgen liegen, sonst lehnt TED die Bekanntmachung ab. Dies wird derzeit NICHT im Vermittlungsdienst geprüft, da es sich um eine neue dynamische Regel von TED handelt
 - Die Rolle **ted-esen** darf in Bekanntmachungen NICHT verwendet werden, weder als org-role noch als org-sub-role. Dies führt zu Problemen in der Transformation, da immer automatisch das Beschaffungsamt als ted-esen gesetzt wird
-
 - Das Feld **Preferred Publication Date BT-738 (RequestedPublicationDate)** kann laut deutschem Standard auf den selben Zeitpunkt wie das Notice Dispatch date oder bis zu 2 Tage nach dem Notice Dispatch date gesetzt werden. Bitte achten Sie darauf, für beide Werte die selbe Zeitzone anzugeben, da es sonst in Einzelfällen zu Ablehnungen bei TED kommen kann
 - Die Befüllung des Feldes **BT-165 Winner Size (Winner Size)** wird derzeit nicht von den deutschen Regeln geprüft. Bitte stellen Sie selbstständig sicher, dass dieses Feld für die folgenden Notice Types korrekt befüllt wird: '25', '26', '27', '28', '29', '30', '31', '32', 'E4', '33', '34', '35', '36' & '37'
-- Derzeit besteht ein Bug bei TED, dass basierend auf einschränkenden Regeln zu CPV-Codes **Zuwendungsempfänger** nur Bauleistungen, aber <u>keine Liefer- und Dienstleistungen</u> ausschreiben können. TED arbeitet noch daran, dies zu beheben.
-Die CPV-Codes werden wie folgt interpretiert:
-    - Lieferleistungen: Haupt-CPV-Code aus den Abteilungen 0 bis 44 oder 48
-    - Dienstleistungen: Haupt-CPV-Code aus den Abteilungen 49 bis 98
-    - Bauarbeiten: Haupt-CPV-Code aus der Abteilung 45
-    - Sollten Sie hiervon betroffen sein (Bekanntmachung schlägt fehl wegen Regel **BR-BT-00262-0211**), melden Sie sich bitte umgehend bei unserem Support support-oeffentlichevergabe@bdr.de für spezifische Hilfestellungen
 - Für die Befüllung der **BT-501 Identifikationsnummer (der Organisation)** beachten Sie bitte die Hinweise u. A. zur Leitweg-ID in unserer FAQ: https://github.com/EFA-FHB/ozg-vermittlungsdienst-doku/blob/main/faq.md#identifikationsnummer-organisation-bt-501
 - Sollte ihr System nach dem doe_status INTERNAL_ERROR (welcher NICHT final ist) den Bekanntmachungsstatus nicht mehr automatisch aktualisieren, können Sie den Status auch über die Notices Tabelle im Self-Service Portal (portal.ozg-vermittlungsdienst.de) mit den Login Daten ihres Systems beim Vermittlungsdienst prüfen. Bekanntmachungen werden nicht im INTERNAL_ERROR Status verbleiben. Bitte eröffnen sie hierzu keine Tickets bei der BDR, sondern wenden Sie sich an Ihren Fachverfahrenshersteller. Lediglich der doe_status REJECTED is final, in diesem Fall müssen sie die Bekanntmachung mit einer neuen Notice-ID oder Version einliefern. 
 
 
 ## Hinweise für Fachverfahrenshersteller
 - Der doe_status INTERNAL_ERROR ist KEIN finaler Status, egal mit welchem ted_status er kombiniert ist. Dieser bedeutet, dass sich unser Support die Bekanntmachung genauer anschaut und sie anschließend, je nach Fehlermeldung ( z.B. 502 Gateway Timeout von TED oder ein inhaltlicher Fehler wie oben genannt z.B. IssueDate falsch) entweder auf doe_status REJECTED setzt (final abgelehnt) oder auf doe_status ACCEPTED.  Dieser Prozess wird in Zukunft weiter optimiert und automatisiert, aber bitte hören Sie bei einem doe_status INTERNAL_ERROR nicht auf, den Status für die Bekanntmachung abzufragen. 
-- Wir beobachten derzeit vermehrt Ablehnungen beim Einliefern basierend auf falscher Syntax der Email für die Angabe "authorEmail". Bitte achten Sie darauf, dass in diesem Feld eine gültige Email mit korrekter Syntax beim Einliefern in den Vermittlungsdienst für jede Bekanntmachung mitgeliefert wird. Wenn die Email nicht korrekt ist, erscheint die folgende Fehlermeldung: "NOTICE_METADATA_INVALID - Es fehlen benötigte Daten oder die eingegebenen Daten entsprechen nicht dem Schema". Wir validieren Emails anhand des folgenden von TED vorgegebenen Regex Ausdrucks: \b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(?:_[A-Za-z0-9.-])*\.[A-Za-z]{2,5}\b <br>
-Falls sie Domains haben, die dem nicht entsprechen, eröffnen Sie gern ein Support-Ticket bei TED. 
+
 
 ## Anstehende Wartungsfenster
 
 | Umgebung    | System                           | Datum      | Zeit              | Kommentar           |
 |-------------|----------------------------------|------------|-------------------|---------------------|
-| Produktion | Vermittlungsdienst | 21.03.2024 | 16:00 - 17:00 CEST | Wartungsarbeiten: Autorisierungstoken soll neu erstellt werden |
 | Produktion | Alle Services des DÖE außer BKMS | 27.-28.04.2024 | 20:00 - 20:00 CEST | Infrastrukturwartung |
 | Produktion | Alle Services des DÖE außer BKMS | 27.-28.07.2024 | 20:00 - 20:00 CEST | Infrastrukturwartung |
 | Produktion | Alle Services des DÖE außer BKMS | 26.-27.10.2024 | 20:00 - 20:00 CEST | Infrastrukturwartung |
@@ -38,7 +29,11 @@ Falls sie Domains haben, die dem nicht entsprechen, eröffnen Sie gern ein Suppo
 
 | System       | vorhanden seit      | voraussichtliche Behebung   | Fehler           | Status           |
 |--------------|--------------------------|-----------------------------|---------------------|----|
+| Notice Viewer   | 02.04.2024 | 05/24 | Im Notice Viewer können derzeit einzelne eFormsDE 1.2 Bekanntmachungen mit Indicatorfeldern nicht gerendert werden | __In Analyse__ |
 | Integration mit BKMS   | 14.03.2024 | 14.03.2024 | Authentifizierungsproblem beim BKMS führt zur Störungen während des Lieferungsprozesses | __Behoben__ |
+| TED   | 10/23 | ca. 02/24  | TED prüfte zu rstriktives Muster bei Emails, wird nun nicht mehr geprüft | __Behoben__ |
+| TED   | 10/23 | ca. 02/24  | TED hatte zu restriktive Regel BR-BT-00262-0211 zu Zuwendungsempfängern  - wurde nun entfernt | __Behoben__ |
+| TED   | 10/23 | ca. 02/24  | TED hatte zu restriktive Regel zu elektronischer Rechnung - wurde nun entfernt | __Behoben__ |
 | Vermittlungsdienst | 29.02.2024 | 21.03.2024 | Störungen bei der Bearbeitung der Lieferungen aufgrund der starken Belastung | __Behoben__ |
 
 
@@ -52,6 +47,7 @@ Am 27.09.2023 wurde der API-Key für die Einlieferung bei TED angepasst. Aus die
 
 | Umgebung                 | System              | Datum      | Zeit              | Kommentar           |
 |--------------------------|---------------------|------------|-------------------|---------------------|
+| Produktion               | Alle Services des DÖE außer BKMS | 21.03.2024 | 16:00 - 17:00 CEST | Wartungsarbeiten: Autorisierungstoken soll neu erstellt werden |
 | Produktion               | Alle Services des DÖE außer BKMS | 27.-28.01.2024 | 20:00 - 20:00 CEST | Infrastrukturwartung |
 | Staging                  | Alle Services des DÖE außer BKMS | 17.01.2024 | 19:00 - 20:00 CEST | Infrastrukturwartung | 
 | Produktion und Staging   | Alle Services des DÖE außer BKMS | 09.01.2024 | 20:00 - 22:00 CEST | Infrastrukturwartung | 
